@@ -2,11 +2,12 @@
 % WEEK 3
 % 
 % This is an example code for collecting object sample colors using roipoly
-function [muVal,sigmaVal,sampleImage] = characterize_features()
+function [muVal,sigmaVal,sampleImage] = characterize_features(fileStr)
 
 close all
 dirPath  = uigetdir('Select directory to characterize.');
-fileList = recursive_file_listing(dirPath, '*.png', false);
+%fileList = recursive_file_listing(dirPath, '*.png', false);
+fileList = recursive_file_listing(dirPath, fileStr, false);
 
 numFiles = size(fileList,1);
 sampleImage = [];
