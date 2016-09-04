@@ -32,15 +32,14 @@ thresh = 5E-6;
 % 
 [numRows,numCols,~] = size(I);
 imageMat = double(I);
-probMat  = zeros(numRows,numCols);
 
-for iRow = 1:numRows
-    for iCol = 1:numCols
-        pixOfInt = squeeze(imageMat(iRow,iCol,:))';
-        probVal = mvnpdf(pixOfInt,muVal,sigmaVal);
-        probMat(iRow,iCol) = probVal; %mvnpdf(pixOfInt,mu,sigma);
-    end
-end
+lineRed = reshape(imageMat(:,:,1),[numRows*numCols,1]);
+lineGrn = reshape(imageMat(:,:,2),[numRows*numCols,1]);
+lineBlu = reshape(imageMat(:,:,3),[numRows*numCols,1]);
+
+pixOfInt = [lineRed,lineGrn,lineBlu];
+probValMat = mvnpdf(pixOfInt,muVal,sigmaVal);
+probMat = reshape(probValMat,[numRows,numCols]);
 
 probMask = zeros(size(probMat));
 probMask(probMat>thresh) = 1;

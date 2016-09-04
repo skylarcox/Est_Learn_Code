@@ -19,21 +19,21 @@ sigmaVal = [134.70,102.78,-145.037;...
     102.78,130.81,-164.34;...
     -145.037,-164.34,292.05];
 
-thresh = 1E-6;
+thresh = 5E-6;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Find ball-color pixels using your model
-% 
+%
 [numRows,numCols,~] = size(I);
 imageMat = double(I);
-probMat  = zeros(numRows,numCols);
 
-for iRow = 1:numRows
-    for iCol = 1:numCols
-        pixOfInt = squeeze(imageMat(iRow,iCol,:))';
-        probMat(iRow,iCol) = mvnpdf(pixOfInt,muVal,sigmaVal);
-    end
-end
+lineRed = reshape(imageMat(:,:,1),[numRows*numCols,1]);
+lineGrn = reshape(imageMat(:,:,2),[numRows*numCols,1]);
+lineBlu = reshape(imageMat(:,:,3),[numRows*numCols,1]);
+
+pixOfInt = [lineRed,lineGrn,lineBlu];
+probValMat = mvnpdf(pixOfInt,muVal,sigmaVal);
+probMat = reshape(probValMat,[numRows,numCols]);
 
 probMask = zeros(size(probMat));
 probMask(probMat>thresh) = 1;
